@@ -1,0 +1,87 @@
+version: "3.8"
+
+services:
+  orion:
+    image: fiware/orion:${ORION_VERSION}
+    hostname: orion
+    container_name: fiware-orion
+    restart: unless-stopped
+    depends_on:
+      - mongo-db
+    networks:
+      - stdft
+    ports:
+      - "${ORION_PORT}:${ORION_PORT}"
+    command: -dbhost mongo-db -dbuser ${MONGO_ROOT_USERNAME} -dbpwd ${MONGO_ROOT_PASSWORD} -logLevel DEBUG -noCache
+    healthcheck:
+      test: curl --fail -s http://orion:${ORION_PORT}/version || exit 1
+      interval: 1m
+      timeout: 10s
+      retries: 3
+
+  # Core tool that creates the forecasts
+  core-tool:
+    build:
+      context: ./flask-backend
+      dockerfile: Dockerfile
+      # shm_size for ray hyperparameter tuning
+      shm_size: "8gb"
+    shm_size: "8gb"
+    image: core-tool
+    container_name: core-tool
+    depends_on:
+      - mongo-db
+      - orion
+    hostname: core-tool
+    restart: unless-stopped
+    environment:
+      - "APP_NAME=core-tool"
+      - "CONTEXT_BROKER=http://orion:${ORION_PORT}/v2"
+      - "MONGO_CONTAINER_NAME=mongo-db"
+      - "MONGO_DATABASE=${MONGO_DATABASE}"
+      - "MONGO_ROOT_USERNAME=${MONGO_ROOT_USERNAME}"
+      - "MONGO_ROOT_PASSWORD=${MONGO_ROOT_PASSWORD}"
+      - "RAY_NUM_GPUS=0"
+    volumes:
+      - models:/app/data/models
+    env_file:
+      - .env
+    networks:
+      - stdft
+
+  mongo-db:
+    image: mongo:${MONGO_DB_VERSION}
+    container_name: mongo-db
+    hostname: mongo-db
+    restart: unless-stopped
+    expose:
+      - "${MONGO_DB_PORT}"
+    ports:
+      - "${MONGO_DB_PORT}:${MONGO_DB_PORT}" # localhost:27017
+    environment:
+      - "MONGO_INITDB_DATABASE=${MONGO_DATABASE}"
+      - "MONGO_INITDB_ROOT_USERNAME=${MONGO_ROOT_USERNAME}"
+      - "MONGO_INITDB_ROOT_PASSWORD=${MONGO_ROOT_PASSWORD}"
+    volumes:
+      - mongo_db:/data/db
+      - mongo_config_db:/data/configdb
+      - ./mongodb_backups:/mongodb_backups
+      # Script to populate mongo on first startup
+      - ./db-init:/docker-entrypoint-initdb.d:ro
+    networks:
+      - stdft
+    healthcheck:
+      test: |
+        host=`hostname --ip-address || echo '127.0.0.1'`; 
+        mongo --quiet $host/test --eval 'quit(db.runCommand({ ping: 1 }).ok ? 0 : 2)' && echo 0 || echo 1
+      interval: 1m
+      timeout: 10s
+      retries: 3
+
+networks:
+  stdft:
+
+volumes:
+  mongo_db:
+  mongo_config_db:
+  models:

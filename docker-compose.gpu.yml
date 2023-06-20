@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  core-tool:
+    build:
+      context: ./flask-backend
+      dockerfile: Dockerfile-gpu
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    environment:
+      RAY_NUM_GPUS: 1

@@ -1,0 +1,8 @@
+node_modules
+npm-debug.log
+#.eslintrc
+.git
+.gitignore
+#.prettierrc
+README.md
+.vscode

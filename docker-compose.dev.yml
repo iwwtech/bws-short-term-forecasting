@@ -1,0 +1,11 @@
+version: "3.8"
+
+services:
+  core-tool:
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./flask-backend/app:/core-tool/app
+    environment:
+      - APP_ENV=development
+    command: ["python", "/core-tool/run.py"]

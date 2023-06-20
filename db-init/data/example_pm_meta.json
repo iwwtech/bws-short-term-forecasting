@@ -1,0 +1,54 @@
+[
+  {
+    "_id": "urn:ngsi-ld:Device:family-household",
+    "id": "urn:ngsi-ld:Device:family-household",
+    "date": "2023-05-01T12:44:25.073010",
+    "category": "Meter",
+    "description": "Smart meter to measure water flow.",
+    "address": {
+      "addressCountry": "DE",
+      "addressLocality": "Bremen",
+      "streetAddress": "Am Wall 201"
+    },
+    "type": "Device"
+  },
+  {
+    "_id": "urn:ngsi-ld:Device:retired-household",
+    "id": "urn:ngsi-ld:Device:retired-household",
+    "date": "2023-05-01T12:44:25.073010",
+    "category": "Meter",
+    "description": "Smart meter to measure water flow.",
+    "address": {
+      "addressCountry": "DE",
+      "addressLocality": "Bremen",
+      "streetAddress": "Hutfiltern 22"
+    },
+    "type": "Device"
+  },
+  {
+    "_id": "urn:ngsi-ld:Device:single-household",
+    "id": "urn:ngsi-ld:Device:single-household",
+    "date": "2023-05-01T12:44:25.073010",
+    "category": "Meter",
+    "description": "Smart meter to measure water flow.",
+    "address": {
+      "addressCountry": "DE",
+      "addressLocality": "Bremen",
+      "streetAddress": "Friedrich-Ebert-Straße 10"
+    },
+    "type": "Device"
+  },
+  {
+    "_id": "urn:ngsi-ld:Device:atypical-household",
+    "id": "urn:ngsi-ld:Device:atypical-household",
+    "date": "2023-05-01T12:44:25.073010",
+    "category": "Meter",
+    "description": "Smart meter to measure water flow.",
+    "address": {
+      "addressCountry": "DE",
+      "addressLocality": "Bremen",
+      "streetAddress": "Obernstraße 1"
+    },
+    "type": "Device"
+  }
+]

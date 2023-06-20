@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  core-tool:
+    environment:
+      - APP_ENV=production
+
+    # Start uWSGI to connect to nginx
+    # NOTE: Adapt this according to your needs.
+    # If you plan to use uwsgi, you also have to set up a uwsgi.ini file
+    # that can be accessed by the core-tool container
+    command: ["uwsgi", "uwsgi.ini"]
+
+  # Reverse proxy
+  nginx:
+    image: nginx:latest
+    restart: unless-stopped
+    ports:
+      - "443:443"
+      - "80:80"
+    volumes:
+      # SSL certificates
+      #- /etc/letsencrypt/live/<YOUR_DOMAIN_NAME>/fullchain.pem:/etc/letsencrypt/live/<YOUR_DOMAIN_NAME>/fullchain.pem
+      #- /etc/letsencrypt/live/<YOUR_DOMAIN_NAME>/privkey.pem:/etc/letsencrypt/live/<YOUR_DOMAIN_NAME>/privkey.pem
+      # Config file
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf

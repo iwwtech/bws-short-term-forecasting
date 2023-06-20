@@ -1,0 +1,27 @@
+# Stage 1 - install dependencies
+FROM pytorch/pytorch:1.13.1-cuda11.6-cudnn8-runtime as builder
+
+# Install GCC that is required for building some of the python packages
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends build-essential && \
+    rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt /requirements.txt
+
+RUN pip install --user -r /requirements.txt
+
+# Stage 2 - Start from clean image without cached files etc...
+# Keep only the libraries installed in the previous stage
+FROM pytorch/pytorch:1.13.1-cuda11.6-cudnn8-runtime
+
+COPY --from=builder /root/.local /root/.local
+
+ENV PATH=/root/.local/bin:$PATH
+
+EXPOSE 5000
+
+WORKDIR /core-tool
+
+COPY . /core-tool
+
+CMD ["python", "run.py"]
