@@ -36,11 +36,12 @@ def main():
         that it is allowed to receive request from this api server
         """
         response.headers.add("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE")
+        
         # Specify allowed origins (avoid using *)
-        #allowed_origins = ["https://example.com", "https://sub.example.com"]
-        #origin = request.headers.get("Origin")
-        #if origin in allowed_origins:
-        #    response.headers.add("Access-Control-Allow-Origin", origin)
+        allowed_origins = ["http://localhost:3000", "https://example.com", "https://sub.example.com"]
+        origin = request.headers.get("Origin")
+        if origin in allowed_origins:
+            response.headers.add("Access-Control-Allow-Origin", origin)
 
         #response.headers.add("Access-Control-Allow-Credentials", True)
         response.headers.add(

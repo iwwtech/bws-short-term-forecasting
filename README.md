@@ -78,10 +78,10 @@ The following steps are required to get started. By default, the tool will load 
 1. Install Docker
 2. Clone the repository
 3. Modify the .env file to your needs
-4. Place your organization's data in db-init/data and modify the mongo-init.sh script accordingly. Note that you may need to convert the line endings of mongo-init.sh to LF if the data is not loaded correctly.
+4. Place your organization's data in db-init/data and modify the mongo-init.sh script accordingly.
 5. Production only: Set up a measurement agent that continuously updates the deviceMeasurements collection in MongoDB.
 6. Production only: Set up a weather agent that provides historical and future weather data (or other time series features) on demand.
-7. Production only: Configure containers to run in a production environment. For this, you want to configure a webserver like uWSGI to run the flask application (see the flask-backend/uwsgi.ini and docker-compose.prod.yml files). Additionally, you likely want to set up a reverse proxy that forwards requests to the core-tool. You can adapt the docker-compose.prod.yml and nginx.conf configuration file to achieve this.
+7. Production only: Configure containers to run in a production environment. For this, you want to configure a webserver like uWSGI to run the flask application (see the flask-backend/uwsgi.ini and docker-compose.prod.yml files). Additionally, you likely want to set up a reverse proxy that forwards requests to the core-tool. You can adapt the docker-compose.prod.yml and nginx.conf configuration file to achieve this. For security reasons, you should specify the allowed_origins in __main__.py.
 8. Run one of the two below commands:
 
 ```console

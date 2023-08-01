@@ -1,0 +1,2 @@
+# Make sure that the mongoDB init script has linux style line endings as expected by the container
+db-init/mongo-init.sh text eol=lf
